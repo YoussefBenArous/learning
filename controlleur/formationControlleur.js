@@ -1,5 +1,5 @@
 const Formation = require('../modles/formation'); // Ensure the path to your model is correct
-
+const cour = require('../modles/cours');
 exports.getFormation = async (req, res) => {
     const { nameF } = req.query; // Use req.query if you're passing parameters via query strings or to get from what we have on bd
 
@@ -84,5 +84,38 @@ exports.updateFormation = async (req, res) => {
         return res.status(500).json({ msg: "Problem updating formation..." });
     }
 };
+exports.addcour = async (req, res) => {
+    const { _id, titreC, descriptionC } = req.body;
+    try {
+        // Verify if the formation exists
+        const formation = await Formation.findById(_id);
+        if (!formation) {
+            console.log("There is no Formation with this ID.");
+            return res.status(404).json({ msg: "There is no Formation with this ID." });
+        }
 
+        // Check if the course already exists
+        let existingCour = await cour.findOne({ titreC, descriptionC });
+        if (existingCour) {
+         // Link the course to the formation
+            if (!formation.cours.includes(existingCour._id)) {
+                formation.cours.push(existingCour._id);
+                await formation.save();
+            }
+            console.log("Existing course linked to the formation.");
+            return res.json({ msg: "Existing course linked to the formation.", existingCour });
+        }
+
+        // If course does not exist, create a new one
+        const newCour = await cour.create({ titreC, descriptionC });
+        formation.cours.push(newCour._id); // Link the new course to the formation
+        await formation.save(); // Save the updated formation
+
+        console.log("Added successfully:", newCour);
+        res.json({ msg: "Added successfully.", newCour });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ msg: "Error adding course." });
+    }
+};
 

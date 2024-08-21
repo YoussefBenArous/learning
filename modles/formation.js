@@ -17,5 +17,9 @@ const formationschema = new mongoose.Schema({
         type: String ,
         required: true
     },
+    cours: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Cour' 
+    }]
 });
 module.exports = mongoose.model('Formation', formationschema);
