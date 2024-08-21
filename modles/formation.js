@@ -1,27 +1,21 @@
 const mongoose = require('mongoose');
 
 const formationschema = new mongoose.Schema({
-    nameF: {
+    nameF:{
         type: String,
         required: true
     },
-    dureeF: {
-        type: String,
+    dureeF:{
+        type: String ,
         required: true
     },
-    formateur: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+    formateur:{
+        type: mongoose.Schema.Types.ObjectId, ref: 'User',        
         required: true
     },
-    descriptionF: {
-        type: String,
+    descriptionF:{
+        type: String ,
         required: true
     },
-    cours: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Cour' // Assuming the course model is called 'Cour'
-    }]
 });
-
 module.exports = mongoose.model('Formation', formationschema);

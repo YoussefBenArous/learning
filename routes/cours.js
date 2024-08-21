@@ -4,7 +4,6 @@ const {getCours} = require('../controlleur/courControlleur');
 const {getCourById} = require('../controlleur/courControlleur');
 const {createCour}= require('../controlleur/courControlleur');
 const {updateCour} = require ('../controlleur/courControlleur');
-const {suprimer} = require('../controlleur/courControlleur');
 const router = express.Router();
 const Cour = require ('../modles/cours');
 router.post (
@@ -35,8 +34,40 @@ router.post (
             res.status(500).send('Server error');
         }
     }
-);
+)
+// Supprimer un  cour d'une formation  (Admin seulement)
+router.delete(
+    '/:id',
+    async(req,res)=>{
+        try {
+            // veref ask foramtion and cour exist
+            const formation = await formation.findById(req.params.foramtionId);
+            if(!formation){
+                return res.status(404).json({msg:'formation not found'});
+            }
+            const cour = await cour.findById(req.params.courId);
+            if (!cour){
+                return res.status(404).json({msg:'cour not found'});   
+            }
+            if(cour.formation.toString()!==req.params.foramtionId){
+                return res.status(404).json({msg:'ce cour n appartient pas a cette formation'});
 
+            }
+            
+        
+        // delete cour
+        await cour.delete();
+        res.json({msg:'cour deleted ...'});
+        //suprimer la reference de la lecon 
+        formation.cours= formation.cours.filter(
+            courId => courId.toString()!==req.params.courId);
+        
+        await formation.save();
+        res.json({msg:'cour suprime'});
+    }catch(error){
+        res.status(500).json({msg:'error to delete cour'});
+    }
+});
 // show all cours we have
 router.get('/getcour',
     getCours
@@ -53,8 +84,4 @@ router.post('/createCour',
 router.put('/updateCour',
     updateCour
 );
-//delete cour from Formation
-router.delete('/suprimer',
-    suprimer
-)
 module.exports = router;

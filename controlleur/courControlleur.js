@@ -1,5 +1,4 @@
 const cour = require('../modles/cours');
-const Formation = require('../modles/formation');
 exports.getCours = async (req,res) => {
     const {titreC } = req.body;
     try{
@@ -65,42 +64,4 @@ exports.updateCour =async (req,res)=> {
         console.log("error to update cour");
         return res.status(500).json({msg:"error to update cour"});
     }
-};
-// veref if cour exist in formation and delet it
-exports.suprimer = async (req, res )=> {
-    const {formationid , courid}= req.body;
-    try {
-        // vere if foramtion exist 
-        const veref = await Formation.findById(formationid);
-        if(!veref){
-            console.log("Formation n'existe pas");
-            return res.status(404).json({msg:"Formation n'existe pas"});
-        }
-        console.log("Formation Exist");
-
-        if (veref.cours && veref.cours.includes(courid) ){
-            console.log("Cour Exist on Formation",courid);
-
-            //delet cour find
-            veref.cours = veref.cours.filter(id=>id.toString()!==courid);
-
-            //save the update
-            await veref.save();
-
-            //delet cour 
-            const mawjoudfformation = await cour.findByIdAndDelete(courid);
-            if(!mawjoudfformation){
-                console.log("cour not found in formation");
-                return res.status(404).json({msg:"cour not found in formation"});
-            }
-            console.log("delete Cour Successful");
-            return res.json({msg:"delete Cour Successful"});
-        }else{
-            console.log("Cour does not exist in Formation");
-            return res.status(404).json({msg:"Cour does not exist in formation"});
-        }
-    }catch(err){
-        console.log("Error to suprimer veref votre code..");
-        return res.status(500).json({msg:"Error to suprimer veref votre code.."});
-    }
-};
+}
