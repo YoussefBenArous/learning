@@ -5,6 +5,7 @@ const {getFormation} = require('../controlleur/formationControlleur');
 const {getFormationById} = require('../controlleur/formationControlleur');
 const {creationFormation} = require ('../controlleur/formationControlleur');
 const {updateFormation} = require('../controlleur/formationControlleur');
+const {addcour} = require('../controlleur/formationControlleur');
 const router = express.Router();
 router.post('/formation',
     [
@@ -97,4 +98,8 @@ router.put('/updateFormation',
 
     updateFormation
 );
+//add cour to formation
+router.post('/addcour',
+    addcour
+)
 module.exports=router;
