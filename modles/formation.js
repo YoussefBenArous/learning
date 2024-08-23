@@ -9,10 +9,10 @@ const formationschema = new mongoose.Schema({
         type: String ,
         required: true
     },
-    formateur:{
+    formateur:[{
         type: mongoose.Schema.Types.ObjectId, ref: 'User',        
         required: true
-    },
+    }],
     descriptionF:{
         type: String ,
         required: true

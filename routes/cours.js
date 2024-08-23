@@ -41,7 +41,7 @@ router.get('/getcour',
     getCours
 );
 //find cours using id
-router.get('/getCourById',
+router.get('/:getCourById',
     getCourById
 );
 // creation de nouveaux cours
@@ -49,11 +49,11 @@ router.post('/createCour',
     createCour
 );
 //Update cour
-router.put('/updateCour',
+router.put('/:updateCour',
     updateCour
 );
 //delet cour from formation and bd of cours
-router.delete('/suprimer',
+router.delete('/:formationid/:courid',
     suprimer
 );
 module.exports = router;

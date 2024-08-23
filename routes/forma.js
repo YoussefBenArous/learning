@@ -6,6 +6,8 @@ const {getFormationById} = require('../controlleur/formationControlleur');
 const {creationFormation} = require ('../controlleur/formationControlleur');
 const {updateFormation} = require('../controlleur/formationControlleur');
 const {addcour} = require('../controlleur/formationControlleur');
+const {suppformateurfromformation}= require('../controlleur/formationControlleur');
+const {addFormateur}= require('../controlleur/formationControlleur');
 const router = express.Router();
 router.post('/formation',
     [
@@ -83,7 +85,7 @@ router.get(
 );
 // recuper fomation by id
 router.get(
-    '/getFormationById',
+    '/:getFormationById',
 
     getFormationById
 );
@@ -93,13 +95,21 @@ router.post(
     creationFormation
 );
 // update Formation
-router.put('/updateFormation',
+router.put('/:idofformation',
     
 
     updateFormation
 );
 //add cour to formation
-router.post('/addcour',
+router.post('/:addcourid',
     addcour
+);
+//delet formateur from formation
+router.delete('/:foramtionid/:formateurid',
+    suppformateurfromformation
+);
+// add formateur to formation 
+router.post('/:foramaid',
+    addFormateur
 );
 module.exports=router;
